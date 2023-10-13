@@ -5,19 +5,12 @@
 <body>
 {% block content %}
         {%- block mainmenu -%}
-<ul class="mainmenu">
+<ul>
         {% for p in menu -%}
-        <li><a href="{{p.url}}">{{p.title}}</a></li>
+        <li>{{p}}</li>
         {% endfor -%}
 </ul>
         {% endblock mainmenu -%}
-<div class="clear"></div>
-<div class="content">
-        {% if title -%}
-<h1> {{title}}</h1>
-        {% else -%}
-{% endif -%}
 {%endblock -%}
-</div>
 </body>
 </html>
