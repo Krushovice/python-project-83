@@ -6,7 +6,7 @@ build: #  Сборка пакета
 
 publish:
 	poetry publish --dry-run
-make
+
 package-install:
 	pip install --user --force-reinstall dist/*.whl
 
