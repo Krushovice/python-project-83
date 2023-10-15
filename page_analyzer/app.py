@@ -13,12 +13,11 @@ DEBUG = True
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-menu = ["Анализатор страниц", "Caйты"]
+
 
 @app.route('/')
 def index():
-    return render_template('index.html',
-                           menu=menu)
+    return render_template('index.html')
 
 
 def main():
