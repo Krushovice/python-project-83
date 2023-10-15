@@ -1,11 +1,15 @@
+import os
+from dotenv import load_dotenv
 from flask import (Flask, flash, render_template, request,
                    redirect, url_for, get_flashed_messages,
                    make_response, session, abort, g)
 
 
 # конфигурация
-SECRET_KEY = '13@2L8%1FRkrF57vcdv54###$@!$$$##'
+load_dotenv()
+SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -20,6 +24,6 @@ def index():
 def main():
     app.run(debug=True)
 
-
-if __name__ == '__main__':
-    main()
+print(SECRET_KEY)
+# if __name__ == '__main__':
+#     main()
