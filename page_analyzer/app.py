@@ -24,6 +24,6 @@ def index():
 def main():
     app.run(debug=True)
 
-print(SECRET_KEY)
-# if __name__ == '__main__':
-#     main()
+
+if __name__ == '__main__':
+    main()
