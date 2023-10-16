@@ -58,9 +58,18 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/urls', methods=['GET', 'POST'])
+@app.route('/urls')
 def get_urls():
     return render_template('urls.html')
+
+
+@app.route('/urls', method = 'POST')
+def check_url():
+    pass
+
+@app.route('/urls/<id>')
+def show_url(id):
+    pass
 
 
 def main():
