@@ -28,17 +28,18 @@
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-nowrap" data-test="url">
           <tbody>
+          {% for p in list %}
             <tr>
                 <td>ID</td>
-                <td>Здесь должен быть айдти сайта</td>
+                <td>{{p.id}}</td>
             </tr>
             <tr>
                 <td>Имя</td>
-                <td>Ссылка сайта</td>
+                <td>{{p.name}}</td>
             </tr>
             <tr>
                 <td>Дата создания</td>
-                <td>Дата из базы данных</td>
+                <td>{{p.created_at}}</td>
             </tr>
           </tbody>
         </table>

@@ -1,5 +1,6 @@
 import os
 import psycopg2
+from datetime import datetime
 from db import FDataBase
 from dotenv import load_dotenv
 from validator import validate
@@ -66,17 +67,32 @@ def get_urls():
         url = request.form['url']
         if validate(url):
             res = dbase.addUrl(url)
+            return redirect(url_for('show_url', id=dbase.getId(url)))
         else:
             flash('Некорректный URL')
             return redirect(url_for('index'))
-        return render_template('check.html')
-    else:
-        return render_template('urls.html')
 
+    else:
+        data = dbase.getUnique()
+        last_check = datetime.now().date()
+        content = render_template('urls.html', data=data, last_check=last_check)
+        status = make_response(content).status_code
+        return render_template('urls.html',
+                                data=data,
+                                last_check=last_check,
+                                status=status)
 
 @app.route('/urls/<id>')
 def show_url(id):
-    pass
+    id, name, created_at = dbase.getUrl(id)
+    if not addr:
+        abort(404)
+
+    return render_template('check.html',
+                           id=id,
+                           name=name,
+                           created_at=created_at)
+
 
 
 def main():
