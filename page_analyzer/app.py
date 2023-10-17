@@ -2,6 +2,7 @@ import os
 import psycopg2
 # from .db import FDataBase
 from dotenv import load_dotenv
+from validator import validate
 from flask import (Flask, flash, render_template, request,
                    redirect, url_for, get_flashed_messages,
                    make_response, session, abort, g)
@@ -27,13 +28,13 @@ def connect_db():
     return conn
 
 
-# def create_db():
-#     # Вспомогательная функция для создания таблиц БД
-#     db = connect_db()
-#     with app.open_resource('database.sql', mode='r') as f:
-#         db.cursor().executescript(f.read())
-#     db.commit()
-#     db.close()
+def create_db():
+    # Вспомогательная функция для создания таблиц БД
+    db = connect_db()
+    with app.open_resource('database.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+    db.close()
 
 
 # def get_db():

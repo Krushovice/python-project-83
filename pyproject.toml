@@ -2,7 +2,7 @@
 name = "hexlet-code"
 version = "0.1.0"
 description = "Page analyzer"
-authors = ["krushovice"]
+authors = ["krushovice <kickstar69@yandex.ru>"]
 readme = "README.md"
 packages = [{include = "page_analyzer"}]
 
@@ -16,6 +16,7 @@ psycopg2-binary = "2.9.7"
 pytest-cov = "^4.1.0"
 beautifulsoup4 = "4.12.2"
 Werkzeug = "2.2.2"
+validators = "^0.22.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.2"

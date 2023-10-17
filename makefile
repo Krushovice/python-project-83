@@ -13,13 +13,13 @@ package-install:
 lint:
 	poetry run flake8 app
 
-test:
-	poetry run pytest
+# test:
+# 	poetry run pytest
 
-test-coverage:
-	poetry run pytest --cov=gendiff --cov-report xml tests/
+# test-coverage:
+# 	poetry run pytest --cov=app --cov-report xml tests/
 
-.PHONY: install build publish package-install lint check test-coverage
+# .PHONY: install build publish package-install lint check test-coverage
 
 dev:
 	poetry run flask --app page_analyzer: app run

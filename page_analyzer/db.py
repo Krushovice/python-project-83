@@ -12,11 +12,10 @@ class FDataBase:
 
 
 
-    def getUrls(self, url_id):
+    def getUrl(self, url_id):
         try:
             self.__cur.execute(f"""SELECT * FROM urls
-                                ORDER BY created_at
-                                LIMIT 1""")
+                                WHERE id = (url_id)""")
 
             res = self.__cur.fetchone()
             if not res:
@@ -24,49 +23,12 @@ class FDataBase:
                 return False
             return res
 
-        # except sqlite3.Error as e:
-        #     print('Ошибка получения данных из БД '+str(e))
-
-        return False
-
-    def getUserByEmail(self, email):
-        try:
-            self.__cur.execute(f"""SELECT * FROM users WHERE
-                               email = '{email}' LIMIT 1""")
-
-            res = self.__cur.fetchone()
-            if not res:
-                print('Пользователь не найден')
-                return False
-            return res
-
-        except sqlite3.Error as e:
+        except psycopg2.Error as e:
             print('Ошибка получения данных из БД '+str(e))
 
         return False
 
-    def addUser(self, name, email, hpsw):
-        try:
-            self.__cur.execute(f"""SELECT COUNT() as 'count' FROM users
-                               WHERE email LIKE '{email}'""")
-            res = self.__cur.fetchone()
-            if res['count'] > 0:
-                print('Пользователь с такой почтой уже существует!')
-                return False
-
-            tm = math.floor(time.time())
-            self.__cur.execute("""INSERT INTO users VALUES
-                                (NULL, ?, ?, ?, NULL, ?)""",
-                               (name, email, hpsw, tm))
-            self.__db.commit()
-
-        except sqlite3.Error as e:
-            print('Ошибка добавления пользователя в БД '+str(e))
-            return False
-
-        return True
-
-    def addPost(self, title, text, url):
+    def addUrl(self, title, text, url):
         try:
             self.__cur.execute(f"""SELECT COUNT() as 'count' FROM posts
                                WHERE url LIKE '{url}'""")
@@ -88,7 +50,7 @@ class FDataBase:
             return False
         return True
 
-    def getPost(self, alias):
+    def getUrlChecks(self):
         try:
             self.__cur.execute(f"""SELECT title, text FROM posts
                                WHERE url LIKE '{alias}' LIMIT 1""")
