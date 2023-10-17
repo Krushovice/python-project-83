@@ -2,7 +2,7 @@ install:
 	poetry install
 
 build: #  Сборка пакета
-	poetry build
+	./build.sh
 
 publish:
 	poetry publish --dry-run
