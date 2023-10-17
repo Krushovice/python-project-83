@@ -3,6 +3,7 @@ import time
 import psycopg2
 import re
 from flask import url_for
+from validator import parseUrl
 
 
 class FDataBase:
@@ -10,55 +11,43 @@ class FDataBase:
         self.__db = db
         self.__cur = db.cursor()
 
-
-
-    def getUrl(self, url_id):
+    def addUrl(self, url):
         try:
-            self.__cur.execute(f"""SELECT * FROM urls
-                                WHERE id = (url_id)""")
-
-            res = self.__cur.fetchone()
-            if not res:
-                print('Cайт не найден')
-                return False
-            return res
-
-        except psycopg2.Error as e:
-            print('Ошибка получения данных из БД '+str(e))
-
-        return False
-
-    def addUrl(self, title, text, url):
-        try:
-            self.__cur.execute(f"""SELECT COUNT() as 'count' FROM posts
-                               WHERE url LIKE '{url}'""")
-            res = self.__cur.fetchone()
-            if res['count'] > 0:
-                print('Статья с таким url уже существует')
-                return False
-            base = url_for('static', filename='images')
-
-            text = re.sub(r"(?P<tag><img\s+[^>]*src=)(?P<quote>[\"'])(?P<url>.+?)(?P=quote)>",
-                          "\\g<tag>" + base + "/\\g<url>>", text)
-
             tm = math.floor(time.time())
-            self.__cur.execute('INSERT INTO posts VALUES(NULL, ?, ?, ?, ?)',
-                               (title, text, url, tm))
+            addr = parseUrl(url)
+            self.__cur.execute('INSERT INTO urls (name, created_at) VALUES(addr, tm)')
             self.__db.commit()
-        except sqlite3.Error as e:
+        except psycopg2.Error as e:
             print("Ошибка добавления статьи в БД "+str(e))
             return False
         return True
+    # def getUrl(self, url_id):
+    #     try:
+    #         self.__cur.execute(f"""SELECT * FROM urls
+    #                             WHERE id = (url_id)""")
 
-    def getUrlChecks(self):
-        try:
-            self.__cur.execute(f"""SELECT title, text FROM posts
-                               WHERE url LIKE '{alias}' LIMIT 1""")
-            res = self.__cur.fetchone()
-            if res:
-                return res
+    #         res = self.__cur.fetchone()
+    #         if not res:
+    #             print('Cайт не найден')
+    #             return False
+    #         return res
 
-        except sqlite3.Error as e:
-            print("Ошибка получения статьи из БД "+str(e))
+    #     except psycopg2.Error as e:
+    #         print('Ошибка получения данных из БД '+str(e))
 
-        return (False, False)
+        # return False
+
+
+
+    # def getUrlChecks(self):
+    #     try:
+    #         self.__cur.execute(f"""SELECT title, text FROM posts
+    #                            WHERE url LIKE '{alias}' LIMIT 1""")
+    #         res = self.__cur.fetchone()
+    #         if res:
+    #             return res
+
+    #     except psycopg2.Error as e:
+    #         print("Ошибка получения статьи из БД "+str(e))
+
+    #     return (False, False)
