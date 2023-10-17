@@ -1,5 +1,5 @@
 import math
-import time
+from datetime import datetime
 import psycopg2
 import re
 from flask import url_for
@@ -13,9 +13,9 @@ class FDataBase:
 
     def addUrl(self, url):
         try:
-            tm = math.floor(time.time())
+            tm = datetime.now().date()
             addr = parseUrl(url)
-            self.__cur.execute('INSERT INTO urls (name, created_at) VALUES(addr, tm)')
+            self.__cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (addr, tm))
             self.__db.commit()
         except psycopg2.Error as e:
             print("Ошибка добавления статьи в БД "+str(e))
@@ -50,4 +50,4 @@ class FDataBase:
     #     except psycopg2.Error as e:
     #         print("Ошибка получения статьи из БД "+str(e))
 
-    #     return (False, False)
+        # return (False, False)

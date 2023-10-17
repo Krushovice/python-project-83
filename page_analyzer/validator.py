@@ -1,5 +1,6 @@
 import validators
 from urllib.parse import urlparse
+from datetime import datetime
 
 
 def validate(url):
