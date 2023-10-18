@@ -70,7 +70,7 @@ def get_urls():
             data = dbase.addUrl(url)
             return redirect(url_for('show_url', id=dbase.getIdAfterAdd(url)))
         else:
-            flash('Некорректный URL', category='error')
+            flash('Некорректный URL', category='danger')
             return redirect(url_for('index'))
 
 
