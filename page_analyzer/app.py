@@ -66,8 +66,11 @@ def get_urls():
     if request.method == 'POST':
         url = request.form['url']
         if validate(url):
-            flash('Страница успешно добавлена',category='success')
-            data = dbase.addUrl(url)
+            if not dbase.getUrl(url):
+                data = dbase.addUrl(url)
+                flash('Страница успешно добавлена',category='success')
+                return redirect(url_for('show_url', id=dbase.getIdAfterAdd(url)))
+            flash('Страница уже существует', category='success')
             return redirect(url_for('show_url', id=dbase.getIdAfterAdd(url)))
         else:
             flash('Некорректный URL', category='danger')
