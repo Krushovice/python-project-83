@@ -61,31 +61,35 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/urls', methods = ['GET','POST'])
+@app.route('/urls', methods=['GET', 'POST'])
 def get_urls():
     if request.method == 'POST':
         url = request.form['url']
         if validate(url):
-            res = dbase.addUrl(url)
-            return redirect(url_for('show_url', id=dbase.getId(url)))
+            data = dbase.addUrl(url)
+            return redirect(url_for('show_url', id=dbase.getIdAfterAdd(url)))
         else:
             flash('Некорректный URL')
             return redirect(url_for('index'))
 
+
     else:
         data = dbase.getUnique()
-        last_check = datetime.now().date()
-        content = render_template('urls.html', data=data, last_check=last_check)
-        status = make_response(content).status_code
-        return render_template('urls.html',
-                                data=data,
-                                last_check=last_check,
-                                status=status)
+        return render_template('urls.html', data=data)
+
+        # last_check = datetime.now().date()
+        # content = render_template('urls.html', data=data, last_check=last_check)
+        # status = make_response(content).status_code
+
 
 @app.route('/urls/<id>')
 def show_url(id):
-    id, name, created_at = dbase.getUrl(id)
-    if not addr:
+    page = dbase.getPageById(id)
+    id = page[0]
+    name = page[1]
+    created_at = page[2]
+
+    if not page:
         abort(404)
 
     return render_template('check.html',

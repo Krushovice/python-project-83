@@ -1,7 +1,6 @@
 import math
 from datetime import datetime
 import psycopg2
-import re
 from flask import url_for
 from validator import parseUrl
 
@@ -13,8 +12,14 @@ class FDataBase:
 
     def addUrl(self, url):
         try:
-            tm = datetime.now().date()
+            tm = datetime.now()
             addr = parseUrl(url)
+            self.__cur.execute('SELECT id FROM urls WHERE name = %s', (addr,))
+            existing_record = self.__cur.fetchone()
+
+            if existing_record:
+                print('Запись с таким именем уже существует')
+                return False
             self.__cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (addr, tm))
             self.__db.commit()
         except psycopg2.Error as e:
@@ -22,7 +27,7 @@ class FDataBase:
             return False
         return True
 
-    def getUrl(self, url_id):
+    def getPageById(self, url_id):
 
         try:
             self.__cur.execute("""SELECT id, name, created_at FROM urls
@@ -40,9 +45,10 @@ class FDataBase:
 
         return False
 
-    def getId(self, url):
+    def getUrl(self, url):
         try:
-
+            self.__cur.execute("""SELECT * FROM urls
+                                WHERE name = %s""", (url,))
             res = self.__cur.fetchone()
             if not res:
                 print('Cайт не найден')
@@ -54,11 +60,18 @@ class FDataBase:
 
         return False
 
+    def getIdAfterAdd(self, url):
+        # Вызываем метод getUrl для получения данных после добавления
+        data = self.getUrl(url)
+        if data:
+            # Если данные найдены, возвращаем id из полученных данных
+            return data[0]
+        else:
+            return None
 
     def getUnique(self):
         try:
-            self.__cur.execute(f"""SELECT * FROM urls
-                                ORDER BY created_at LIMIT 5""")
+            self.__cur.execute("""SELECT * FROM urls ORDER BY created_at DESC LIMIT 5""")
             res = self.__cur.fetchall()
             if not res:
                 print('Таблица пуста')
@@ -67,5 +80,4 @@ class FDataBase:
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))
-
-        return False
+            return False

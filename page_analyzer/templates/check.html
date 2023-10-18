@@ -19,28 +19,27 @@
         </div>
       </nav>
     </header>
-{% for msg in get_flashed_messages(True) %}
-<div class="alert alert-info" role="alert">{{msg}}</div>
-{% endfor %}
+<div class="alert alert-info" role="alert">{{Message}}</div>
 <main class="flex-grow-1">
   <div class="container-lg mt-3">
-    <h1> Имя сайта </h1>
+    {% for row in data %}
+    <h1> {{row[1]}}</h1>
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-nowrap" data-test="url">
           <tbody>
-          {% for p in list %}
             <tr>
                 <td>ID</td>
-                <td>{{p.id}}</td>
+                <td>{{row[0]}}</td>
             </tr>
             <tr>
                 <td>Имя</td>
-                <td>{{p.name}}</td>
+                <td>{{row[1]}}</td>
             </tr>
             <tr>
                 <td>Дата создания</td>
-                <td>{{p.created_at}}</td>
+                <td>{{row[2]}}</td>
             </tr>
+          {% endfor %}
           </tbody>
         </table>
     </div>

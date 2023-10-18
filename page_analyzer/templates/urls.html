@@ -34,14 +34,14 @@
     </tr>
     </thead>
     <tbody>
-    {% for d in data %}
+    {% for row in data %}
     <tr>
-      <td>{{d.id}}</td>
+      <td>{{row[0]}}</td>
       <td>
-        <a href=f"/urls/{d.id}">{{d.name}}</a>
+        <a href=f"/urls/{row[0]}">{{row[1]}}</a>
       </td>
-      <td>{{last_check}}</td>
-      <td>{{status}}</td>
+      <td></td>
+      <td></td>
     </tr>
     {% endfor %}
     </tbody>
