@@ -1,7 +1,7 @@
 import os
 import psycopg2
 from datetime import datetime
-from page_analyzer import db
+from page_analyzer.db import FDataBase
 from dotenv import load_dotenv
 from page_analyzer.validator import validate
 from flask import (Flask, flash, render_template, request,
