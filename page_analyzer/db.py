@@ -2,7 +2,7 @@ import math
 from datetime import datetime
 import psycopg2
 from flask import url_for
-from validator import parseUrl
+from page_analyzer.validator import parseUrl
 
 
 class FDataBase:

@@ -1,9 +1,9 @@
 import os
 import psycopg2
 from datetime import datetime
-from db import FDataBase
+from page_analyzer import db
 from dotenv import load_dotenv
-from validator import validate
+from page_analyzer.validator import validate
 from flask import (Flask, flash, render_template, request,
                    redirect, url_for, get_flashed_messages,
                    make_response, session, abort, g)
