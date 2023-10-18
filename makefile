@@ -9,7 +9,7 @@ install:
 build-db: db-reset schema-data-load
 
 db-start:
-	sudo service postgresql start
+	service postgresql start
 
 db-status:
 	sudo service postgresql status
