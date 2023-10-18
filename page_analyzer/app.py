@@ -66,10 +66,11 @@ def get_urls():
     if request.method == 'POST':
         url = request.form['url']
         if validate(url):
+            flash('Страница успешно добавлена',category='success')
             data = dbase.addUrl(url)
             return redirect(url_for('show_url', id=dbase.getIdAfterAdd(url)))
         else:
-            flash('Некорректный URL')
+            flash('Некорректный URL', category='error')
             return redirect(url_for('index'))
 
 
@@ -87,7 +88,7 @@ def show_url(id):
     page = dbase.getPageById(id)
     id = page[0]
     name = page[1]
-    created_at = page[2]
+    created_at = page[2].date()
 
     if not page:
         abort(404)
