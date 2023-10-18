@@ -6,16 +6,8 @@ LOCAL_DB_USER = krushovice
 
 install:
 	poetry install
+
 build-db: db-reset schema-data-load
-
-db-start:
-	service postgresql start
-
-db-status:
-	sudo service postgresql status
-
-db-stop:
-	sudo service postgresql stop
 
 db-create:
 	createdb $(DB_NAME)
@@ -38,11 +30,6 @@ db-dev-setup: db-reset schema-data-load
 schema-data-load:
 	psql $(DB_NAME) < database.sql
 
-db-dump:
-	pg_dump -h localhost -d $(DB_NAME) -U $(LOCAL_DB_USER) -W -Ft > db-project.dump
-
-db-railway-update:
-	pg_restore -U postgres -h containers-us-west-152.railway.app -p 8050 -W -Ft -d railway db-project.dump
 
 dev-server-run:
 	poetry run flask --app page_analyzer:app run
