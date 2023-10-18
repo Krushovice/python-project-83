@@ -6,7 +6,7 @@ LOCAL_DB_USER = krushovice
 
 install:
 	poetry install
-build-db: db-drop db-create schema-data-load
+build-db: db-reset schema-data-load
 
 db-start:
 	sudo service postgresql start
