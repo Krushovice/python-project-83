@@ -9,12 +9,6 @@ install:
 
 build-db: db-reset schema-data-load
 
-db-create:
-	createdb $(DB_NAME)
-
-db-drop:
-	dropdb $(DB_NAME)
-
 db-reset:
 	dropdb $(DB_NAME) || true
 	createdb $(DB_NAME)
