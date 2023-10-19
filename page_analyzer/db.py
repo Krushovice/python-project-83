@@ -31,7 +31,7 @@ class FDataBase:
 
         try:
             self.__cur.execute(f"""SELECT * FROM urls
-                                WHERE id = {url_id} LIMIT 1 """)
+                                WHERE id = {url_id} LIMIT 1""")
 
             res = self.__cur.fetchone()
             if not res:
@@ -47,8 +47,8 @@ class FDataBase:
 
     def getUrl(self, url):
         try:
-            self.__cur.execute("""SELECT * FROM urls
-                                WHERE name = %s""", (url,))
+            self.__cur.execute(f"""SELECT * FROM urls
+                                WHERE name = {url}""")
             res = self.__cur.fetchone()
             if not res:
                 print('Cайт не найден')

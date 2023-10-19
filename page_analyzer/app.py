@@ -95,9 +95,6 @@ def show_url(id):
     id, name, created_at = dbase.getPageById(id)
     date = created_at.date()
 
-    if not page:
-        abort(404)
-
     return render_template('check.html',
                            id=id,
                            name=name,
