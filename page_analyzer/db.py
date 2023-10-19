@@ -47,8 +47,8 @@ class FDataBase:
 
     def getUrl(self, url):
         try:
-            self.__cur.execute(f"""SELECT * FROM urls
-                                WHERE name = {url}""")
+            self.__cur.execute("""SELECT * FROM urls
+                                WHERE name = %s""", (url,))
             res = self.__cur.fetchone()
             if not res:
                 print('Cайт не найден')
