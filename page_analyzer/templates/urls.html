@@ -34,7 +34,8 @@
     </tr>
     </thead>
     <tbody>
-    {% for row in data %}
+    {% if data %}
+      {% for row in data %}
     <tr>
       <td>{{row[0]}}</td>
       <td>
@@ -44,6 +45,16 @@
       <td></td>
     </tr>
     {% endfor %}
+    {% else %}
+    <tr>
+      <td></td>
+      <td>
+        <a href=f"/urls/"></a>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    {% endif %}
     </tbody>
   </table>
  </div>

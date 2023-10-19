@@ -13,7 +13,7 @@ from flask import (Flask, flash, render_template, request,
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv('DATABASE_LOCAL')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -79,8 +79,10 @@ def get_urls():
 
     else:
         data = dbase.getUnique()
-        return render_template('urls.html', data=data)
+        if data:
+            return render_template('urls.html', data=data)
 
+        return render_template('urls.html')
         # last_check = datetime.now().date()
         # content = render_template('urls.html', data=data, last_check=last_check)
         # status = make_response(content).status_code
