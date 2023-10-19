@@ -1039,6 +1039,21 @@ poetry = ">=1.5.0,<2.0.0"
 poetry-core = ">=1.6.0,<2.0.0"
 
 [[package]]
+name = "postgres"
+version = "4.0"
+description = "postgres is a high-value abstraction over psycopg2."
+optional = false
+python-versions = "*"
+files = [
+    {file = "postgres-4.0-py2.py3-none-any.whl", hash = "sha256:d81f757acbde2ca12785b8a3d44c39f1e49782963e84eb67d3e029ad67d6b1d3"},
+    {file = "postgres-4.0.tar.gz", hash = "sha256:67c57de10c0d39cd5e3437eef7ac895b2b53747603b3edcd261dedec5ac04d4c"},
+]
+
+[package.dependencies]
+psycopg2-binary = ">=2.8"
+psycopg2-pool = "*"
+
+[[package]]
 name = "psycopg2-binary"
 version = "2.9.7"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
@@ -1106,6 +1121,20 @@ files = [
     {file = "psycopg2_binary-2.9.7-cp39-cp39-win32.whl", hash = "sha256:18f12632ab516c47c1ac4841a78fddea6508a8284c7cf0f292cb1a523f2e2379"},
     {file = "psycopg2_binary-2.9.7-cp39-cp39-win_amd64.whl", hash = "sha256:eb3b8d55924a6058a26db69fb1d3e7e32695ff8b491835ba9f479537e14dcf9f"},
 ]
+
+[[package]]
+name = "psycopg2-pool"
+version = "1.1"
+description = "Proper pooling of psycopg2 connections"
+optional = false
+python-versions = ">= 2.7, != 3.0.*, != 3.1.*, != 3.2.*, != 3.3.*, != 3.4.*"
+files = [
+    {file = "psycopg2-pool-1.1.tar.gz", hash = "sha256:de88615c24ddfc7ee314c566976cfed4bbb009211255f2773ea09e5f938ff400"},
+    {file = "psycopg2_pool-1.1-py2.py3-none-any.whl", hash = "sha256:529c4100db56a3522cf680ce8d89e71511e37c7e0b1f120ce0dde0f13c6e5844"},
+]
+
+[package.dependencies]
+psycopg2-binary = "*"
 
 [[package]]
 name = "ptyprocess"
@@ -1663,4 +1692,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "9f2b23b4948d7f29a6481cc8bf201d8f60d830e9210b5c742a17de524e66b04a"
+content-hash = "30c84de306600e8f92f43818652a801c5c482adf5c029e452a0c7db168f461fb"
