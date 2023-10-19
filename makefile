@@ -7,14 +7,6 @@ LOCAL_DB_USER = krushovice
 install:
 	poetry install
 
-build-db: db-reset schema-data-load
-
-db-reset:
-	dropdb $(DB_NAME) || true
-	createdb $(DB_NAME)
-
-dbs-show:
-	psql -l
 
 db-connect:
 	psql -d $(DB_NAME)
