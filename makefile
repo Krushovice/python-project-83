@@ -34,8 +34,6 @@ schema-data-load:
 dev-server-run:
 	poetry run flask --app page_analyzer:app run
 
-render:
-	PGPASSWORD=IPj89bzlZKve7tUZVyFcrUck1amTZ8xb psql -h dpg-cknq6f9rfc9c739si3i0-a.oregon-postgres.render.com -U krushovice pages_j6gj
 
 start:
 	poetry run gunicorn -w 5 -b 0.0.0.0:$(PORT) page_analyzer:app
