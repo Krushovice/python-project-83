@@ -30,8 +30,8 @@ class FDataBase:
     def getPageById(self, url_id):
 
         try:
-            self.__cur.execute("""SELECT id, name, created_at FROM urls
-                                WHERE id = %s""", (url_id,))
+            self.__cur.execute(f"""SELECT * FROM urls
+                                WHERE id = {url_id} LIMIT 1 """)
 
             res = self.__cur.fetchone()
             if not res:

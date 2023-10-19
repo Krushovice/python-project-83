@@ -13,7 +13,7 @@ from flask import (Flask, flash, render_template, request,
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
-DATABASE_URL = os.getenv('DATABASE_LOCAL')
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -68,10 +68,12 @@ def get_urls():
         if validate(url):
             if not dbase.getUrl(url):
                 data = dbase.addUrl(url)
+                page_id = dbase.getIdAfterAdd(url)
                 flash('Страница успешно добавлена',category='success')
-                return redirect(url_for('show_url', id=dbase.getIdAfterAdd(url)))
+                return redirect(url_for('show_url', id=f'{page_id}'))
             flash('Страница уже существует', category='success')
-            return redirect(url_for('show_url', id=dbase.getIdAfterAdd(url)))
+            page_id = dbase.getIdAfterAdd(url)
+            return redirect(url_for('show_url', id=f'{page_id}'))
         else:
             flash('Некорректный URL', category='danger')
             return redirect(url_for('index'))
@@ -90,10 +92,8 @@ def get_urls():
 
 @app.route('/urls/<id>')
 def show_url(id):
-    page = dbase.getPageById(id)
-    id = page[0]
-    name = page[1]
-    created_at = page[2].date()
+    id, name, created_at = dbase.getPageById(id)
+    date = created_at.date()
 
     if not page:
         abort(404)
@@ -101,13 +101,13 @@ def show_url(id):
     return render_template('check.html',
                            id=id,
                            name=name,
-                           created_at=created_at)
+                           date=date)
 
 
 
-def main():
-    app.run(debug=True)
+# def main():
+#     app.run(debug=True)
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
