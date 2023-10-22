@@ -31,11 +31,35 @@ def normalize_str(data):
     return result
 
 
-
 def normalize(data):
-    keys = ['id', 'url', 'created_at']
-    result = {}
+    keys_for_urls = ['id', 'name', 'date']
+    keys_for_checks = ['id', 'url_id', 'status_code', 'h1', 'title', 'discription', 'date']
+    if len(data) > 3:
+        keys = keys_for_checks
+    else:
+        keys = keys_for_urls
+    result = {key: value for key, value in zip(keys, data)}
 
-    for item in data:
-       if len(data) == 3:
     return result
+
+# def normalize(data):
+#     result = {'id': '',
+#               'url_id': '',
+#               'name': '',
+#               'h1': '',
+#               'title': '',
+#               'discription': '',
+#               'date': ''}
+#     if len(data) == 3:
+#         result['id'] = data[0]
+#         result['name'] = data[1]
+#         result['date'] = data[:-1]
+#     else:
+#         result['id'] = data[0]
+#         result['url_id'] = data[1]
+#         result['status_code'] = data[2]
+#         result['h1'] = data[3]
+#         result['title'] = data[4]
+#         result['discription'] = data[5]
+#         result['date'] = data[:-1]
+#     return result

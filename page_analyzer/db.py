@@ -3,7 +3,7 @@ from datetime import datetime
 import psycopg2
 import psycopg2.extras
 from flask import url_for
-from page_analyzer.validator import parseUrl, normalize_str
+from page_analyzer.validator import parseUrl, normalize_str, normalize
 
 
 class FDataBase:
@@ -70,7 +70,7 @@ class FDataBase:
                 print('Cайт не найден')
                 return False
 
-            return res
+            return normalize(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))
@@ -85,7 +85,7 @@ class FDataBase:
             if not res:
                 print('Cайт не найден')
                 return False
-            return res
+            return normalize(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД '+str(e))
@@ -97,7 +97,7 @@ class FDataBase:
         data = self.getUrl(url)
         if data:
             # Если данные найдены, возвращаем id из полученных данных
-            return data[0]
+            return data['id']
         else:
             return None
 
