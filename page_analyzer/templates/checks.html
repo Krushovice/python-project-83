@@ -42,17 +42,18 @@
             </tr>
             <tr>
                 <td>Дата создания</td>
-                <td>{{date}}</td>
+                <td>{{create_date}}</td>
             </tr>
           </tbody>
         </table>
     </div>
     <h2 class="mt-5 mb-3">Проверки</h2>
-    <form method="post" action="/urls/<id-сайта>/checks">
+    <form action="{{url_for('check_url', id=id)}}" method="post">
         <input type="submit" class="btn btn-primary" value="Запустить проверку">
     </form>
     <div>
         <table class="table table-bordered table-hover mt-2" data-test="checks">
+
             <thead>
               <tr>
                 <th>ID</th>
@@ -63,30 +64,19 @@
                 <th>Дата создания</th>
               </tr>
             </thead>
-              <tbody>
-
-            <tr>
-                <td>#айди сайта</td>
-                <td>#код ответа</td>
+            <tbody>
+              <tr>
+                <td>{{check_id}}</td>
                 <td></td>
-                <td>#Заголовок сайста</td>
-                <td>#описание сайта</td>
-                <td>#дата создания сайта</td>
-            </tr>
-
-            <tr>
-                <td>#айди сайта</td>
-                <td>#код ответа</td>
                 <td></td>
-                <td>#Заголовок сайста</td>
-                <td>#описание сайта</td>
-                <td>#дата создания сайта</td>
-            </tr>
-
+                <td></td>
+                <td></td>
+                <td>{{date_check}}</td>
+              </tr>
             </tbody>
-            </table>
+          </table>
     </div>
   </div>
-</main>
-  </body>
+ </main>
+ </body>
 </html>

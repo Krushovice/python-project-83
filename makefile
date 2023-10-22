@@ -11,7 +11,6 @@ install:
 db-connect:
 	psql -d $(DB_NAME)
 
-db-dev-setup: db-reset schema-data-load
 
 schema-data-load:
 	psql $(DB_NAME) < database.sql

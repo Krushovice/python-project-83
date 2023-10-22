@@ -1,4 +1,5 @@
 import validators
+import re
 from urllib.parse import urlparse
 from datetime import datetime
 
@@ -12,3 +13,29 @@ def parseUrl(url):
     h = urlparse(url)
     res = f'{h.scheme}://{h.hostname}'
     return res
+
+
+def normalize_str(data):
+    result = {}
+
+    for item in data:
+        match = re.search(r'\((\d+),([^,]+),(\d{4}-\d{2}-\d{2})\)', item)
+        if match:
+            groups = match.groups()
+            if len(groups) == 3:
+                id, value, date = groups
+                result.update({'id': id, 'name': value, 'date': date})
+            elif len(groups) == 2:
+                id, date = groups
+                result.update({'id': id, 'date': date})
+    return result
+
+
+
+def normalize(data):
+    keys = ['id', 'url', 'created_at']
+    result = {}
+
+    for item in data:
+       if len(data) == 3:
+    return result

@@ -35,16 +35,14 @@
     </thead>
     <tbody>
     {% if data %}
-      {% for row in data %}
     <tr>
-      <td>{{row[0]}}</td>
+      <td>{{data['id']}}</td>
       <td>
-        <a href=f"/urls/{row[0]}">{{row[1]}}</a>
+        <a href=f"/urls/{data['id']}">{{data['name']}}</a>
       </td>
       <td></td>
       <td></td>
     </tr>
-    {% endfor %}
     {% else %}
     <tr>
       <td></td>
