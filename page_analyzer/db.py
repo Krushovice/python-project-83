@@ -113,3 +113,16 @@ class FDataBase:
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))
             return False
+
+    def getAllChecks(self):
+        try:
+            self.__dict_cur.execute("""SELECT * FROM url_checks ORDER BY id DESC LIMIT 5""")
+            res = self.__dict_cur.fetchall()
+            if not res:
+                print('Таблица пуста')
+                return False
+            return res
+
+        except psycopg2.Error as e:
+            print('Ошибка получения данных из БД: ' + str(e))
+            return False

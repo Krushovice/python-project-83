@@ -64,14 +64,16 @@
               </tr>
             </thead>
             <tbody>
+              {% for check in checks %}
               <tr>
-                <td>{{check_id}}</td>
+                <td>{{check[0]}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{date_check}}</td>
+                <td>{{check[-1]}}</td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
     </div>
