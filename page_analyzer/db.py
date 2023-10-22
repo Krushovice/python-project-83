@@ -42,7 +42,7 @@ class FDataBase:
 
     def getCheckPage(self, url_id):
         try:
-            self.__dict_cur.execute(f"""SELECT (id, created_at)
+            self.__dict_cur.execute(f"""SELECT *
                                   FROM url_checks
                                   WHERE url_id = {url_id}
                                   ORDER BY id
@@ -52,7 +52,7 @@ class FDataBase:
             if not res:
                 print('Проверка не найдена')
                 return False
-            return normalize_str(res)
+            return normalize(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))

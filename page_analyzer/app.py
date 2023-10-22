@@ -92,16 +92,21 @@ def get_urls():
 
 @app.route('/urls/<id>')
 def show_url(id):
+    check_id = request.args.get('check_id')
+    date_check = request.args.get('date_check')
+
     page = dbase.getPageById(id)
-    print(page)
-    return render_template('index.html')
-    # id = id
-    # name = page['name']
-    # date = page['date']
-    # return render_template('url_page.html',
-    #                        id=id,
-    #                        name=name,
-    #                        date=date)
+    id = id
+    name = page['name']
+    date = page['date'].date()
+
+    return render_template('url_page.html',
+                            id=id,
+                            name=name,
+                            date=date,
+                            check_id=check_id,
+                            date_check=date_check)
+
 
 
 @app.route('/urls/<id>/checks', methods=['POST', 'GET'])
@@ -112,15 +117,16 @@ def check_url(id):
             page = dbase.getCheckPage(id)
             check_id = page['id']
             date_check = page['date']
-            flash('Страница успешно проверена')
-            return redirect(url_for('show_url', id=id),
+            flash('Страница успешно проверена', category='success')
+            return redirect(url_for('show_url',
+                                    id=id,
                                     check_id=check_id,
-                                    date_check=date_check)
+                                    date_check=date_check))
         except psycopg2.Error as e:
             print('Ошибка проверки ' +str(e))
 
     else:
-        return render_template(url_for('index'))
+        return render_template(url_for('show_url', id=id))
 
 # @app.route('/urls/<id>/checks')
 # def url_checks(id):
