@@ -34,17 +34,18 @@
     </tr>
     </thead>
     <tbody>
-    {% if data %}
-      {% for row in data %}
+    {% if urls%}
+      {% for url in urls %}
     <tr>
-      <td>{{row[0]}}</td>
+      <td>{{url['id']}}</td>
       <td>
-        <a href=f"/urls/{row[0]}">{{row[1]}}</a>
+        <a href=f"/urls/{url['id']}">{{url['name']}}</a>
       </td>
+      {% endfor %}
       <td></td>
       <td></td>
     </tr>
-    {% endfor %}
+
     {% else %}
     <tr>
       <td></td>

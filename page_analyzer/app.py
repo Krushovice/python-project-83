@@ -31,7 +31,7 @@ def connect_db():
 
 
 def create_db():
-    # Вспомогательная функция для создания таблиц БД
+    # Вспомогательная функция для локального создания таблиц БД
     db = connect_db()
     with app.open_resource('../database.sql', mode='r') as f:
         db.cursor().execute(f.read())
@@ -66,23 +66,32 @@ def get_urls():
     if request.method == 'POST':
         url = request.form['url']
         if validate(url):
-            if not dbase.getUrl(url):
-                data = dbase.addUrl(url)
-                page_id = dbase.getIdAfterAdd(url)
+            if dbase.addUrl(url):
+                flash('Страница уже существует', category='success')
+                data = dbase.getUrl(url)
+                page_id = data['id']
+                return redirect(url_for('show_url', id=f'{page_id}'))
+            else:
+                dbase.addUrl(url)
+                data = dbase.getUrl(url)
+                page_id = data['id']
                 flash('Страница успешно добавлена',category='success')
                 return redirect(url_for('show_url', id=f'{page_id}'))
-            flash('Страница уже существует', category='success')
-            page_id = dbase.getIdAfterAdd(url)
-            return redirect(url_for('show_url', id=f'{page_id}'))
+
         else:
             flash('Некорректный URL', category='danger')
             return redirect(url_for('index'))
 
-
     else:
-        data = dbase.getUnique()
-        if data:
-            return render_template('urls.html', data=data)
+        urls= dbase.getUnique()
+        print(urls)
+        if urls:
+            check_data = dbase.getAllChecks()
+            print(check_data)
+
+            return render_template('urls.html',
+                                    urls=urls,
+                                    check_data=check_data)
 
         return render_template('urls.html')
         # last_check = datetime.now().date()
@@ -100,15 +109,11 @@ def show_url(id):
     name = page['name']
     date = page['date'].date()
     checks = dbase.getAllChecks()
-    print(checks)
     return render_template('url_page.html',
                             id=id,
                             name=name,
                             date=date,
                             checks=checks)
-                            # check_id=check_id,
-                            # date_check=date_check)
-
 
 
 @app.route('/urls/<id>/checks', methods=['POST', 'GET'])
@@ -122,24 +127,13 @@ def check_url(id):
             flash('Страница успешно проверена', category='success')
             return redirect(url_for('show_url',
                                     id=id))
-                                    # check_id=check_id,
-                                    # date_check=date_check))
+
         except psycopg2.Error as e:
             print('Ошибка проверки ' +str(e))
 
     else:
         return render_template(url_for('show_url', id=id))
 
-# @app.route('/urls/<id>/checks')
-# def url_checks(id):
-#     page = dbase.getPageById(id)
-#     id = id
-#     name = page[1]
-#     date = datetime.now().date()
-#     return render_template('checks.html',
-#                             id=id,
-#                             name=name,
-#                             date=date)
 
 
 

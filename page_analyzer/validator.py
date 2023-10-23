@@ -1,7 +1,7 @@
 import validators
 import re
 from urllib.parse import urlparse
-from datetime import datetime
+from datetime import date
 
 
 def validate(url):
@@ -15,23 +15,37 @@ def parseUrl(url):
     return res
 
 
-def normalize_str(data):
-    result = {}
+# def normalize_str(data):
+#     result = {}
 
-    for item in data:
-        match = re.search(r'\((\d+),([^,]+),(\d{4}-\d{2}-\d{2})\)', item)
-        if match:
-            groups = match.groups()
-            if len(groups) == 3:
-                id, value, date = groups
-                result.update({'id': id, 'name': value, 'date': date})
-            elif len(groups) == 2:
-                id, date = groups
-                result.update({'id': id, 'date': date})
+#     for item in data:
+#         match = re.search(r'\((\d+),([^,]+),(\d{4}-\d{2}-\d{2})\)', item)
+#         if match:
+#             groups = match.groups()
+#             if len(groups) == 3:
+#                 id, value, date = groups
+#                 result.update({'id': id, 'name': value, 'date': date})
+#             elif len(groups) == 2:
+#                 id, date = groups
+#                 result.update({'id': id, 'date': date})
+#     return result
+
+
+def normalizeNested(data):
+    keys_for_urls = ['id', 'name', 'date']
+    keys_for_checks = ['id', 'url_id', 'status_code', 'h1', 'title', 'description', 'date']
+
+    def format_data(item):
+        keys = keys_for_checks if len(item) == 7 else keys_for_urls
+        item_dict = {key: value for key, value in zip(keys, item)}
+
+        return item_dict
+
+    result = [format_data(item) for item in data]
     return result
 
 
-def normalize(data):
+def normalizeSimple(data):
     keys_for_urls = ['id', 'name', 'date']
     keys_for_checks = ['id', 'url_id', 'status_code', 'h1', 'title', 'discription', 'date']
     if len(data) > 3:

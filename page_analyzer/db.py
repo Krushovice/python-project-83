@@ -3,7 +3,7 @@ from datetime import datetime
 import psycopg2
 import psycopg2.extras
 from flask import url_for
-from page_analyzer.validator import parseUrl, normalize_str, normalize
+from page_analyzer.validator import parseUrl, normalizeNested, normalizeSimple
 
 
 class FDataBase:
@@ -52,7 +52,7 @@ class FDataBase:
             if not res:
                 print('Проверка не найдена')
                 return False
-            return normalize(res)
+            return normalizeSimple(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))
@@ -70,7 +70,7 @@ class FDataBase:
                 print('Cайт не найден')
                 return False
 
-            return normalize(res)
+            return normalizeSimple(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))
@@ -85,21 +85,21 @@ class FDataBase:
             if not res:
                 print('Cайт не найден')
                 return False
-            return normalize(res)
+            return normalizeSimple(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД '+str(e))
 
         return False
 
-    def getIdAfterAdd(self, url):
-        # Вызываем метод getUrl для получения данных после добавления
-        data = self.getUrl(url)
-        if data:
-            # Если данные найдены, возвращаем id из полученных данных
-            return data['id']
-        else:
-            return None
+    # def getIdAfterAdd(self, url):
+    #     # Вызываем метод getUrl для получения данных после добавления
+    #     data = self.getUrl(url)
+    #     if data:
+    #         # Если данные найдены, возвращаем id из полученных данных
+    #         return data['id']
+    #     else:
+    #         return None
 
     def getUnique(self):
         try:
@@ -108,7 +108,7 @@ class FDataBase:
             if not res:
                 print('Таблица пуста')
                 return False
-            return res
+            return normalizeNested(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))
@@ -121,7 +121,7 @@ class FDataBase:
             if not res:
                 print('Таблица пуста')
                 return False
-            return res
+            return normalizeNested(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))
