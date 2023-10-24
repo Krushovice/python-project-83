@@ -39,7 +39,7 @@
           <tr>
             <td>{{ url['id'] }}</td>
             <td>
-              <a href="/urls/{{ url['id'] }}">{{ url['name'] }}</a>
+              <a href="{{url_for('show_url', id=url['id'])}}">{{ url['name'] }}</a>
             </td>
             <td>
               {% set check_dates = [] %}
@@ -51,7 +51,19 @@
               {% set sorted_check_dates = check_dates | sort %}
               {{ sorted_check_dates[-1]}}
             </td>
-            <td></td>
+            <td>
+              {% set latest_check = None %}
+              {% set latest_status = None %}
+              {% for check in check_data %}
+                {% if check['url_id'] == url['id'] %}
+                  {% if latest_check is none or check['date'] > latest_check %}
+                    {% set latest_check = check['date'] %}
+                    {% set latest_status = check['status_code'] %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              {{ latest_status if latest_status is not none else '' }}
+            </td>
           </tr>
         {% endfor %}
     {% else %}

@@ -1,5 +1,6 @@
 import os
 import psycopg2
+import requests
 from datetime import datetime
 from page_analyzer.db import FDataBase
 from dotenv import load_dotenv
@@ -66,13 +67,12 @@ def get_urls():
     if request.method == 'POST':
         url = request.form['url']
         if validate(url):
-            if dbase.addUrl(url):
+            if not dbase.addUrl(url):
                 flash('Страница уже существует', category='success')
                 data = dbase.getUrl(url)
                 page_id = data['id']
                 return redirect(url_for('show_url', id=f'{page_id}'))
             else:
-                dbase.addUrl(url)
                 data = dbase.getUrl(url)
                 page_id = data['id']
                 flash('Страница успешно добавлена',category='success')
@@ -119,14 +119,23 @@ def show_url(id):
 @app.route('/urls/<id>/checks', methods=['POST', 'GET'])
 def check_url(id):
     if request.method == "POST":
+        page = dbase.getPageById(id)
+        url = page['name']
         try:
-            dbase.addCheck(id)
+            r = requests.get(url)
+            status = r.status_code
+        except psycopg2.Error as e:
+                flash("Произошла ошибка при проверке", category='danger')
+                print('Ошибка проверки ' +str(e))
+
+        try:
+            dbase.addCheck(id, status)
             page = dbase.getCheckPage(id)
             check_id = page['id']
             date_check = page['date']
             flash('Страница успешно проверена', category='success')
             return redirect(url_for('show_url',
-                                    id=id))
+                                        id=id))
 
         except psycopg2.Error as e:
             print('Ошибка проверки ' +str(e))

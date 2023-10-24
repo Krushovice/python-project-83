@@ -9,7 +9,7 @@ from page_analyzer.validator import parseUrl, normalizeNested, normalizeSimple
 class FDataBase:
     def __init__(self, db):
         self.__db = db
-        # self.__cur = db.cursor()
+        self.__cur = db.cursor()
         self.__dict_cur = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     def addUrl(self, url):
         try:
@@ -28,12 +28,12 @@ class FDataBase:
             return False
         return True
 
-    def addCheck(self, id):
+    def addCheck(self, id, status):
         try:
             tm = datetime.now()
             url_id = id
-            # addr = parseUrl(url)
-            self.__dict_cur.execute('INSERT INTO url_checks (url_id, created_at) VALUES (%s, %s)', (url_id, tm))
+            status_code = status
+            self.__dict_cur.execute('INSERT INTO url_checks (url_id, status_code, created_at) VALUES (%s, %s, %s)', (url_id, status_code, tm))
             self.__db.commit()
         except psycopg2.Error as e:
             print("Ошибка добавления записи в БД "+str(e))
@@ -79,6 +79,7 @@ class FDataBase:
 
     def getUrl(self, url):
         try:
+            url = parseUrl(url)
             self.__dict_cur.execute("""SELECT * FROM urls
                                 WHERE name = %s""", (url,))
             res = self.__dict_cur.fetchone()
