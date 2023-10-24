@@ -10,18 +10,18 @@ class FDataBase:
     def __init__(self, db):
         self.__db = db
         self.__cur = db.cursor()
-        self.__dict_cur = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        # self.__dict_cur = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     def addUrl(self, url):
         try:
             tm = datetime.now()
             addr = parseUrl(url)
-            self.__dict_cur.execute('SELECT id FROM urls WHERE name = %s', (addr,))
-            existing_record = self.__dict_cur.fetchone()
+            self.__cur.execute('SELECT id FROM urls WHERE name = %s', (addr,))
+            existing_record = self.__cur.fetchone()
 
             if existing_record:
                 print('Запись с таким именем уже существует')
                 return False
-            self.__dict_cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (addr, tm))
+            self.__cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (addr, tm))
             self.__db.commit()
         except psycopg2.Error as e:
             print("Ошибка добавления адреса в БД "+str(e))
@@ -38,7 +38,7 @@ class FDataBase:
             tm = datetime.now()
             url_id = id
             status_code = status
-            self.__dict_cur.execute("""INSERT INTO url_checks
+            self.__cur.execute("""INSERT INTO url_checks
                                     (url_id, status_code, h1, title, description , created_at)
                                     VALUES (%s, %s, %s, %s, %s, %s)""",
                                     (url_id, status_code, h1, title, description, tm))
@@ -50,13 +50,13 @@ class FDataBase:
 
     def getCheckPage(self, url_id):
         try:
-            self.__dict_cur.execute(f"""SELECT *
+            self.__cur.execute(f"""SELECT *
                                   FROM url_checks
                                   WHERE url_id = {url_id}
                                   ORDER BY id
                                   DESC
                                   LIMIT 1""")
-            res = self.__dict_cur.fetchone()
+            res = self.__cur.fetchone()
             if not res:
                 print('Проверка не найдена')
                 return False
@@ -70,10 +70,10 @@ class FDataBase:
     def getPageById(self, url_id):
 
         try:
-            self.__dict_cur.execute(f"""SELECT * FROM urls
+            self.__cur.execute(f"""SELECT * FROM urls
                                 WHERE id = {url_id} LIMIT 1""")
 
-            res = self.__dict_cur.fetchone()
+            res = self.__cur.fetchone()
             if not res:
                 print('Cайт не найден')
                 return False
@@ -88,9 +88,9 @@ class FDataBase:
     def getUrl(self, url):
         try:
             url = parseUrl(url)
-            self.__dict_cur.execute("""SELECT * FROM urls
+            self.__cur.execute("""SELECT * FROM urls
                                 WHERE name = %s""", (url,))
-            res = self.__dict_cur.fetchone()
+            res = self.__cur.fetchone()
             if not res:
                 print('Cайт не найден')
                 return False
@@ -112,8 +112,8 @@ class FDataBase:
 
     def getUnique(self):
         try:
-            self.__dict_cur.execute("""SELECT * FROM urls ORDER BY created_at DESC LIMIT 5""")
-            res = self.__dict_cur.fetchall()
+            self.__cur.execute("""SELECT * FROM urls ORDER BY created_at DESC LIMIT 5""")
+            res = self.__cur.fetchall()
             if not res:
                 print('Таблица пуста')
                 return False
@@ -125,8 +125,8 @@ class FDataBase:
 
     def getAllChecks(self):
         try:
-            self.__dict_cur.execute("""SELECT * FROM url_checks ORDER BY id DESC LIMIT 5""")
-            res = self.__dict_cur.fetchall()
+            self.__cur.execute("""SELECT * FROM url_checks ORDER BY id DESC LIMIT 5""")
+            res = self.__cur.fetchall()
             if not res:
                 print('Таблица пуста')
                 return False

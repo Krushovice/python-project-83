@@ -19,8 +19,11 @@ def parseUrl(url):
 def siteAnalize(url):
     try:
         response = requests.get(url)
+        data = {'title': '',
+                'h1': '',
+                'description': ''
+                }
         if response.status_code == 200:
-            data = {}
             soup = BeautifulSoup(response.text, 'html.parser')
             title = soup.find('title')
             meta_description = soup.find('meta', attrs={'name': 'description'})
@@ -28,10 +31,11 @@ def siteAnalize(url):
             data['title'] = title.text if title else ''
             data['description'] = meta_description.get('content') if meta_description else ''
             data['h1'] = h1.text if h1 else ''
-            return data
+
         else:
             print(f'Ошибка при получении страницы. Статус-код: {response.status_code}')
 
+        return data
     except requests.exceptions.RequestException as e:
         print(f'Ошибка при отправке запроса: {e}')
 
@@ -60,3 +64,6 @@ def normalizeSimple(data):
     result = {key: value for key, value in zip(keys, data)}
 
     return result
+
+
+print(siteAnalize('https://www.upwork.com'))
