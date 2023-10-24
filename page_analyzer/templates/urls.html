@@ -34,18 +34,26 @@
     </tr>
     </thead>
     <tbody>
-    {% if urls%}
-      {% for url in urls %}
-    <tr>
-      <td>{{url['id']}}</td>
-      <td>
-        <a href=f"/urls/{url['id']}">{{url['name']}}</a>
-      </td>
-      {% endfor %}
-      <td></td>
-      <td></td>
-    </tr>
-
+      {% if urls %}
+        {% for url in urls %}
+          <tr>
+            <td>{{ url['id'] }}</td>
+            <td>
+              <a href="/urls/{{ url['id'] }}">{{ url['name'] }}</a>
+            </td>
+            <td>
+              {% set check_dates = [] %}
+              {% for check in check_data %}
+                {% if check['url_id'] == url['id'] %}
+                  {% set _ = check_dates.append(check['date'].strftime('%Y-%m-%d')) %}
+                {% endif %}
+              {% endfor %}
+              {% set sorted_check_dates = check_dates | sort %}
+              {{ sorted_check_dates[-1]}}
+            </td>
+            <td></td>
+          </tr>
+        {% endfor %}
     {% else %}
     <tr>
       <td></td>

@@ -63,6 +63,7 @@
                 <th>Дата создания</th>
               </tr>
             </thead>
+            {%if checks%}
             <tbody>
               {% for check in checks %}
               <tr>
@@ -71,10 +72,21 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{check['date']}}</td>
+                <td>{{check['date'].strftime('%Y-%m-%d')}}</td>
               </tr>
               {% endfor %}
             </tbody>
+            {% else %}
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            {%endif%}
           </table>
     </div>
   </div>
