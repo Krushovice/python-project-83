@@ -84,26 +84,17 @@ def get_urls():
 
     else:
         urls= dbase.getUnique()
-        print(urls)
         if urls:
             check_data = dbase.getAllChecks()
-            print(check_data)
-
             return render_template('urls.html',
                                     urls=urls,
                                     check_data=check_data)
 
         return render_template('urls.html')
-        # last_check = datetime.now().date()
-        # content = render_template('urls.html', data=data, last_check=last_check)
-        # status = make_response(content).status_code
 
 
 @app.route('/urls/<id>')
 def show_url(id):
-    # check_id = request.args.get('check_id')
-    # date_check = request.args.get('date_check')
-
     page = dbase.getPageById(id)
     id = id
     name = page['name']
