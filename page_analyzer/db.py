@@ -3,7 +3,7 @@ from datetime import datetime
 import psycopg2
 import psycopg2.extras
 from flask import url_for
-from page_analyzer.validator import parseUrl, normalizeNested, normalizeSimple
+from page_analyzer.validator import parseUrl, normalizeNested, normalizeSimple, siteAnalize
 
 
 class FDataBase:
@@ -29,11 +29,19 @@ class FDataBase:
         return True
 
     def addCheck(self, id, status):
+        page = self.getPageById(id)
+        data = siteAnalize(page['name'])
+        h1 = data['h1']
+        title = data['title']
+        description = data['description']
         try:
             tm = datetime.now()
             url_id = id
             status_code = status
-            self.__dict_cur.execute('INSERT INTO url_checks (url_id, status_code, created_at) VALUES (%s, %s, %s)', (url_id, status_code, tm))
+            self.__dict_cur.execute("""INSERT INTO url_checks
+                                    (url_id, status_code, h1, title, description , created_at)
+                                    VALUES (%s, %s, %s, %s, %s, %s)""",
+                                    (url_id, status_code, h1, title, description, tm))
             self.__db.commit()
         except psycopg2.Error as e:
             print("Ошибка добавления записи в БД "+str(e))

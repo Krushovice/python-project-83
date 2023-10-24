@@ -1,5 +1,6 @@
 import validators
-import re
+import requests
+from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from datetime import date
 
@@ -15,20 +16,24 @@ def parseUrl(url):
     return res
 
 
-# def normalize_str(data):
-#     result = {}
+def siteAnalize(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = {}
+            soup = BeautifulSoup(response.text, 'html.parser')
+            title = soup.find('title')
+            meta_description = soup.find('meta', attrs={'name': 'description'})
+            h1 = soup.find('h1')
+            data['title'] = title.text if title else ''
+            data['description'] = meta_description.get('content') if meta_description else ''
+            data['h1'] = h1.text if h1 else ''
+            return data
+        else:
+            print(f'Ошибка при получении страницы. Статус-код: {response.status_code}')
 
-#     for item in data:
-#         match = re.search(r'\((\d+),([^,]+),(\d{4}-\d{2}-\d{2})\)', item)
-#         if match:
-#             groups = match.groups()
-#             if len(groups) == 3:
-#                 id, value, date = groups
-#                 result.update({'id': id, 'name': value, 'date': date})
-#             elif len(groups) == 2:
-#                 id, date = groups
-#                 result.update({'id': id, 'date': date})
-#     return result
+    except requests.exceptions.RequestException as e:
+        print(f'Ошибка при отправке запроса: {e}')
 
 
 def normalizeNested(data):
