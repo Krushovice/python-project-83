@@ -52,17 +52,17 @@
               {{ sorted_check_dates[-1]}}
             </td>
             <td>
-              {% set latest_check = None %}
-              {% set latest_status = None %}
+              {% set status_codes = [] %}
               {% for check in check_data %}
                 {% if check['url_id'] == url['id'] %}
-                  {% if latest_check is none or check['date'] > latest_check %}
-                    {% set latest_check = check['date'] %}
-                    {% set latest_status = check['status_code'] %}
-                  {% endif %}
+                  {% set _ = status_codes.append(check['status_code']) %}
                 {% endif %}
               {% endfor %}
-              {{ latest_status if latest_status is not none else '' }}
+              {% set sorted_status_codes = status_codes | sort(attribute='date', reverse=true) %}
+              {{ sorted_status_codes[0] if sorted_status_codes|length > 0 else '' }}
+            </td>
+            <td>
+
             </td>
           </tr>
         {% endfor %}
