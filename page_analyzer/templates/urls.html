@@ -61,9 +61,6 @@
               {% set sorted_status_codes = status_codes | sort(attribute='date', reverse=true) %}
               {{ sorted_status_codes[0] if sorted_status_codes|length > 0 else '' }}
             </td>
-            <td>
-
-            </td>
           </tr>
         {% endfor %}
     {% else %}
