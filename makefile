@@ -27,6 +27,6 @@ build: #  Сборка пакета
 	./build.sh
 
 lint:
-	poetry run flake8 page_analuzer
+	poetry run flake8 page_analyzer
 
 .PHONY: install
