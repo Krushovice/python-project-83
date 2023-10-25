@@ -29,10 +29,4 @@ build: #  Сборка пакета
 lint:
 	poetry run flake8 page_analuzer
 
-test:
-	poetry run pytest
-
-test-coverage:
-	poetry run pytest --cov=page_analuzer --cov-report xml tests/
-
 .PHONY: install
