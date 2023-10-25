@@ -54,13 +54,12 @@ class FDataBase:
                                   FROM url_checks
                                   WHERE url_id = {url_id}
                                   ORDER BY id
-                                  DESC
-                                  LIMIT 1""")
-            res = self.__cur.fetchone()
+                                  DESC""")
+            res = self.__cur.fetchall()
             if not res:
                 print('Проверка не найдена')
                 return False
-            return normalizeSimple(res)
+            return normalizeNested(res)
 
         except psycopg2.Error as e:
             print('Ошибка получения данных из БД: ' + str(e))

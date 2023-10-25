@@ -56,7 +56,7 @@ def normalizeNested(data):
 
 def normalizeSimple(data):
     keys_for_urls = ['id', 'name', 'date']
-    keys_for_checks = ['id', 'url_id', 'status_code', 'h1', 'title', 'discription', 'date']
+    keys_for_checks = ['id', 'url_id', 'status_code', 'h1', 'title', 'description', 'date']
     if len(data) > 3:
         keys = keys_for_checks
     else:
@@ -64,6 +64,3 @@ def normalizeSimple(data):
     result = {key: value for key, value in zip(keys, data)}
 
     return result
-
-
-print(siteAnalize('https://www.upwork.com'))

@@ -99,7 +99,7 @@ def show_url(id):
     id = id
     name = page['name']
     date = page['date'].date()
-    checks = dbase.getAllChecks()
+    checks = dbase.getCheckPage(id)
     return render_template('url_page.html',
                             id=id,
                             name=name,
@@ -121,9 +121,6 @@ def check_url(id):
 
         try:
             dbase.addCheck(id, status)
-            page = dbase.getCheckPage(id)
-            check_id = page['id']
-            date_check = page['date']
             flash('Страница успешно проверена', category='success')
             return redirect(url_for('show_url',
                                         id=id))
