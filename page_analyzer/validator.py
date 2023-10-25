@@ -27,11 +27,14 @@ def siteAnalize(url):
             meta_description = soup.find('meta', attrs={'name': 'description'})
             h1 = soup.find('h1')
             data['title'] = title.text if title else ''
-            data['description'] = meta_description.get('content') if meta_description else ''
+            if meta_description:
+                data['description'] = meta_description.get('content')
+            else:
+                ''
             data['h1'] = h1.text if h1 else ''
 
         else:
-            print(f'Ошибка при получении страницы. Статус-код: {response.status_code}')
+            print(f'Ошибка при получении. Статус-код: {response.status_code}')
 
         return data
     except requests.exceptions.RequestException as e:

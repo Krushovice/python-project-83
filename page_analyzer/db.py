@@ -19,7 +19,8 @@ class FDataBase:
             if existing_record:
                 print('Запись с таким именем уже существует')
                 return False
-            self.__cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (addr, tm))
+            self.__cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)',
+                               (addr, tm))
             self.__db.commit()
         except psycopg2.Error as e:
             print("Ошибка добавления адреса в БД "+str(e))
