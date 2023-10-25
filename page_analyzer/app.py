@@ -31,15 +31,6 @@ def connect_db():
     return conn
 
 
-def create_db():
-    # Вспомогательная функция для локального создания таблиц БД
-    db = connect_db()
-    with app.open_resource('../database.sql', mode='r') as f:
-        db.cursor().execute(f.read())
-    db.commit()
-    db.close()
-
-
 def get_db():
     if not hasattr(g, 'link_db'):
         g.link_db = connect_db()
