@@ -1,13 +1,11 @@
 import os
 import psycopg2
 import requests
-from datetime import datetime
 from page_analyzer.db import FDataBase
 from dotenv import load_dotenv
 from page_analyzer.validator import validate
 from flask import (Flask, flash, render_template, request,
-                   redirect, url_for, get_flashed_messages,
-                   make_response, session, abort, g)
+                   redirect, url_for, g)
 
 
 # конфигурация
@@ -25,9 +23,9 @@ def connect_db():
     try:
         # пытаемся подключиться к базе данных
         conn = psycopg2.connect(DATABASE_URL)
-    except:
+    except psycopg2.Error as e:
         # в случае сбоя подключения будет выведено сообщение  в STDOUT
-        print('Сбой подключения к БД')
+        print('Сбой подключения к БД: ' + str(e))
     return conn
 
 
@@ -66,7 +64,7 @@ def get_urls():
             else:
                 data = dbase.getUrl(url)
                 page_id = data['id']
-                flash('Страница успешно добавлена',category='success')
+                flash('Страница успешно добавлена', category='success')
                 return redirect(url_for('show_url', id=f'{page_id}'))
 
         else:
@@ -74,12 +72,12 @@ def get_urls():
             return redirect(url_for('index'))
 
     else:
-        urls= dbase.getUnique()
+        urls = dbase.getUnique()
         if urls:
             check_data = dbase.getAllChecks()
             return render_template('urls.html',
-                                    urls=urls,
-                                    check_data=check_data)
+                                   urls=urls,
+                                   check_data=check_data)
 
         return render_template('urls.html')
 
@@ -92,10 +90,10 @@ def show_url(id):
     date = page['date'].date()
     checks = dbase.getCheckPage(id)
     return render_template('url_page.html',
-                            id=id,
-                            name=name,
-                            date=date,
-                            checks=checks)
+                           id=id,
+                           name=name,
+                           date=date,
+                           checks=checks)
 
 
 @app.route('/urls/<id>/checks', methods=['POST', 'GET'])
@@ -107,27 +105,17 @@ def check_url(id):
             r = requests.get(url)
             status = r.status_code
         except psycopg2.Error as e:
-                flash("Произошла ошибка при проверке", category='danger')
-                print('Ошибка проверки ' +str(e))
+            flash("Произошла ошибка при проверке", category='danger')
+            print('Ошибка проверки ' + str(e))
 
         try:
             dbase.addCheck(id, status)
             flash('Страница успешно проверена', category='success')
             return redirect(url_for('show_url',
-                                        id=id))
+                                    id=id))
 
         except psycopg2.Error as e:
-            print('Ошибка проверки ' +str(e))
+            print('Ошибка проверки ' + str(e))
 
     else:
         return render_template(url_for('show_url', id=id))
-
-
-
-
-# def main():
-#     app.run(debug=True)
-
-
-# if __name__ == '__main__':
-#     main()

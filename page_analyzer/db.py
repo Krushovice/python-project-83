@@ -1,16 +1,14 @@
-import math
-from datetime import datetime
 import psycopg2
-import psycopg2.extras
-from flask import url_for
-from page_analyzer.validator import parseUrl, normalizeNested, normalizeSimple, siteAnalize
+from datetime import datetime
+from page_analyzer.validator import (parseUrl, normalizeNested,
+                                     normalizeSimple, siteAnalize)
 
 
 class FDataBase:
     def __init__(self, db):
         self.__db = db
         self.__cur = db.cursor()
-        # self.__dict_cur = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
     def addUrl(self, url):
         try:
             tm = datetime.now()
@@ -39,9 +37,10 @@ class FDataBase:
             url_id = id
             status_code = status
             self.__cur.execute("""INSERT INTO url_checks
-                                    (url_id, status_code, h1, title, description , created_at)
+                                    (url_id, status_code, h1, title,
+                                    description , created_at)
                                     VALUES (%s, %s, %s, %s, %s, %s)""",
-                                    (url_id, status_code, h1, title, description, tm))
+                               (url_id, status_code, h1, title, description, tm))
             self.__db.commit()
         except psycopg2.Error as e:
             print("Ошибка добавления записи в БД "+str(e))
@@ -99,15 +98,6 @@ class FDataBase:
             print('Ошибка получения данных из БД '+str(e))
 
         return False
-
-    # def getIdAfterAdd(self, url):
-    #     # Вызываем метод getUrl для получения данных после добавления
-    #     data = self.getUrl(url)
-    #     if data:
-    #         # Если данные найдены, возвращаем id из полученных данных
-    #         return data['id']
-    #     else:
-    #         return None
 
     def getUnique(self):
         try:

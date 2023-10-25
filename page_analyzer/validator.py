@@ -2,12 +2,10 @@ import validators
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-from datetime import date
 
 
 def validate(url):
     return True if validators.url(url) else False
-
 
 
 def parseUrl(url):
