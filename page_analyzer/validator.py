@@ -1,5 +1,6 @@
 import validators
 import requests
+import chardet
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
@@ -21,8 +22,18 @@ def siteAnalize(url):
                 'h1': '',
                 'description': ''
                 }
+
         if response.status_code == 200:
-            soup = BeautifulSoup(response.text, 'html.parser')
+            # Определение кодировки из заголовков HTTP, если указано
+            content_type = response.headers.get('content-type')
+            if content_type and 'charset' in content_type:
+                encoding = content_type.split('charset=')[-1]
+            else:
+                encoding = 'utf-8'  # По умолчанию UTF-8
+
+            # Декодирование текста с учетом кодировки
+            decoded_text = response.content.decode(encoding, 'ignore')
+            soup = BeautifulSoup(decoded_text, 'html.parser')
             title = soup.find('title')
             meta_description = soup.find('meta', attrs={'name': 'description'})
             h1 = soup.find('h1')
