@@ -1,6 +1,5 @@
 import validators
 import requests
-import chardet
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 

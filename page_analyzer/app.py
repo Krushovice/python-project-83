@@ -5,7 +5,7 @@ from page_analyzer.db import FDataBase
 from dotenv import load_dotenv
 from page_analyzer.validator import validate
 from flask import (Flask, flash, render_template, request,
-                   redirect, url_for, get_flashed_messages, g)
+                   redirect, url_for, g)
 
 
 # конфигурация
