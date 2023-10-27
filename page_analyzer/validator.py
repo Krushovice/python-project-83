@@ -9,7 +9,7 @@ def validate(url):
         return True if response.status_code == 200 else False
 
     except requests.exceptions.RequestException:
-        print(f"Ошибка подключения к {url}. Сайт недоступен.")
+        print(f"Ошибка подключения к сайту")
 
 
 def toValidString(url):
@@ -20,13 +20,13 @@ def toValidString(url):
 
 def siteAnalize(url):
     try:
-        response = validate(url)
+        response = requests.get(url)
         data = {'title': '',
                 'h1': '',
                 'description': ''
                 }
 
-        if response:
+        if response.status_code == 200:
             # Определение кодировки из заголовков HTTP, если указано
             content_type = response.headers.get('content-type')
             if content_type and 'charset' in content_type:
@@ -79,3 +79,6 @@ def normalizeSimple(data):
     result = {key: value for key, value in zip(keys, data)}
 
     return result
+
+
+print(validate('http://wrong.com'))
