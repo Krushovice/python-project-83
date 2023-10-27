@@ -67,13 +67,10 @@ def get_urls():
 
     else:
         urls = g.dbase.getUnique()
-        if urls:
-            check_data = g.dbase.getAllChecks()
-            return render_template('urls.html',
-                                   urls=urls,
-                                   check_data=check_data)
-
-        return render_template('urls.html')
+        check_data = g.dbase.getAllChecks()
+        return render_template('urls.html',
+                               urls=urls,
+                               check_data=check_data)
 
 
 @app.route('/urls/<id>')

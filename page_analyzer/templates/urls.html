@@ -15,7 +15,7 @@
     </tr>
     </thead>
     <tbody>
-      {% if urls %}
+    {% if urls and check_data %}
         {% for url in urls %}
           <tr>
             <td>{{ url['id'] }}</td>
@@ -44,17 +44,26 @@
             </td>
           </tr>
         {% endfor %}
+    {% elif urls and not check_data %}
+      <tr>
+        <td>{{ url['id'] }}</td>
+        <td>
+          <a href="{{url_for('show_url', id=url['id'])}}">{{ url['name'] }}</a>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
     {% else %}
-    <tr>
-      <td></td>
-      <td>
-        <a href=f"/urls/"></a>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
+      <tr>
+        <td></td>
+        <td>
+          <a href=f"/urls/"></a>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
     {% endif %}
-    </tbody>
+      </tbody>
   </table>
  </div>
 </div>
