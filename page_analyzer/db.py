@@ -1,6 +1,6 @@
 import psycopg2
 from datetime import datetime
-from page_analyzer.validator import (parseUrl, normalizeNested,
+from page_analyzer.validator import (toValidString, normalizeNested,
                                      normalizeSimple, siteAnalize)
 
 
@@ -12,7 +12,7 @@ class FDataBase:
     def addUrl(self, url):
         try:
             tm = datetime.now()
-            addr = parseUrl(url)
+            addr = toValidString(url)
             self.__cur.execute('SELECT id FROM urls WHERE name = %s', (addr,))
             existing_record = self.__cur.fetchone()
 
@@ -86,7 +86,7 @@ class FDataBase:
 
     def getUrl(self, url):
         try:
-            url = parseUrl(url)
+            url = toValidString(url)
             self.__cur.execute("""SELECT * FROM urls
                                 WHERE name = %s""", (url,))
             res = self.__cur.fetchone()

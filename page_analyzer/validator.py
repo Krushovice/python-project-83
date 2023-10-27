@@ -1,14 +1,18 @@
-import validators
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 
 def validate(url):
-    return True if validators.url(url) else False
+    try:
+        response = requests.get(url)
+        return True if response == 200 else False
+
+    except requests.exceptions.RequestException:
+        print(f"Ошибка подключения к {url}. Сайт недоступен.")
 
 
-def parseUrl(url):
+def toValidString(url):
     h = urlparse(url)
     res = f'{h.scheme}://{h.hostname}'
     return res
@@ -16,13 +20,13 @@ def parseUrl(url):
 
 def siteAnalize(url):
     try:
-        response = requests.get(url)
+        response = validate(url)
         data = {'title': '',
                 'h1': '',
                 'description': ''
                 }
 
-        if response.status_code == 200:
+        if response:
             # Определение кодировки из заголовков HTTP, если указано
             content_type = response.headers.get('content-type')
             if content_type and 'charset' in content_type:
