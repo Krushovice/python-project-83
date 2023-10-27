@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 def validate(url):
     try:
         response = requests.get(url)
-        return True if response == 200 else False
+        return True if response.status_code == 200 else False
 
     except requests.exceptions.RequestException:
         print(f"Ошибка подключения к {url}. Сайт недоступен.")

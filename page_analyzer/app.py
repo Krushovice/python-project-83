@@ -63,7 +63,7 @@ def get_urls():
 
         else:
             flash('Некорректный URL', category='danger')
-            return redirect(url_for('index'))
+            return redirect(url_for('index'), 302)
 
     else:
         urls = g.dbase.getUnique()
