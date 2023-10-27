@@ -1,21 +1,27 @@
+import validators
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 
 def validate(url):
-    try:
-        response = requests.get(url)
-        return True if response.status_code == 200 else False
-
-    except requests.exceptions.RequestException:
-        print(f"Ошибка подключения к сайту")
+    return True if validators.url(url) else False
 
 
 def toValidString(url):
     h = urlparse(url)
     res = f'{h.scheme}://{h.hostname}'
     return res
+
+
+def getStatus(url):
+    try:
+        r = requests.get(url)
+        status = r.status_code
+        return status
+
+    except requests.exceptions.RequestException:
+        print('Сайт недействителен')
 
 
 def siteAnalize(url):

@@ -1,9 +1,8 @@
 import os
 import psycopg2
-import requests
 from page_analyzer.db import FDataBase
 from dotenv import load_dotenv
-from page_analyzer.validator import validate
+from page_analyzer.validator import validate, getStatus
 from flask import (Flask, flash, render_template, request,
                    redirect, url_for, g)
 
@@ -63,7 +62,7 @@ def get_urls():
 
         else:
             flash('Некорректный URL', category='danger')
-            return redirect(url_for('index'), 302)
+            return redirect(url_for('index')), 422
 
     else:
         urls = g.dbase.getUnique()
@@ -92,21 +91,15 @@ def check_url(id):
     if request.method == "POST":
         page = g.dbase.getPageById(id)
         url = page['name']
-        try:
-            r = requests.get(url)
-            status = r.status_code
-        except psycopg2.Error as e:
+        status = getStatus(url)
+        if status != 200:
             flash("Произошла ошибка при проверке", category='danger')
-            print('Ошибка проверки ' + str(e))
+            return redirect(url_for('show_url', id=id))
 
-        try:
-            g.dbase.addCheck(id, status)
-            flash('Страница успешно проверена', category='success')
-            return redirect(url_for('show_url',
-                                    id=id))
-
-        except psycopg2.Error as e:
-            print('Ошибка проверки ' + str(e))
+        g.dbase.addCheck(id, status)
+        flash('Страница успешно проверена', category='success')
+        return redirect(url_for('show_url',
+                                id=id))
 
     else:
         return render_template(url_for('show_url', id=id))
