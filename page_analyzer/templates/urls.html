@@ -45,6 +45,7 @@
           </tr>
         {% endfor %}
     {% elif urls and not check_data %}
+      {% for url in urls %}
       <tr>
         <td>{{ url['id'] }}</td>
         <td>
