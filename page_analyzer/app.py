@@ -3,7 +3,7 @@ import psycopg2
 from page_analyzer.db import FDataBase
 from dotenv import load_dotenv
 from page_analyzer.validator import validate, getStatus
-from flask import (Flask, flash, render_template, request,
+from flask import (Flask, flash, make_response, jsonify, render_template, request,
                    redirect, url_for, g)
 
 
@@ -39,6 +39,17 @@ def before_request():
     g.dbase = FDataBase(db)
 
 
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+
+
+@app.errorhandler(404)
+def unprocessable(error):
+    return render_template('error404.html')
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -62,8 +73,7 @@ def get_urls():
 
         else:
             flash('Некорректный URL', category='danger')
-            return redirect(url_for('index')), 422
-
+            return render_template('index.html'), 422
     else:
         urls = g.dbase.getUnique()
         check_data = g.dbase.getAllChecks()
