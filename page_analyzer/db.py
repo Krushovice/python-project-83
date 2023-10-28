@@ -23,7 +23,7 @@ class FDataBase:
                                (addr, tm))
             self.__db.commit()
         except psycopg2.Error as e:
-            print("Ошибка добавления адреса в БД "+str(e))
+            print("Ошибка добавления адреса в БД " + str(e))
             return False
         return True
 
@@ -44,7 +44,7 @@ class FDataBase:
                                (url_id, status_code, h1, title, description, tm))
             self.__db.commit()
         except psycopg2.Error as e:
-            print("Ошибка добавления записи в БД "+str(e))
+            print("Ошибка добавления записи в БД " + str(e))
             return False
         return True
 
@@ -96,7 +96,7 @@ class FDataBase:
             return normalizeSimple(res)
 
         except psycopg2.Error as e:
-            print('Ошибка получения данных из БД '+str(e))
+            print('Ошибка получения данных из БД ' + str(e))
 
         return False
 
