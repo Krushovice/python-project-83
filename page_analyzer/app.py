@@ -3,7 +3,7 @@ import psycopg2
 from page_analyzer.db import FDataBase
 from dotenv import load_dotenv
 from page_analyzer.validator import validate, getStatus
-from flask import (Flask, flash, make_response, jsonify, render_template, request,
+from flask import (Flask, flash, render_template, request,
                    redirect, url_for, g)
 
 
