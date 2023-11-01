@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 
-def validate(url):
+def is_valid(url):
     return True if validators.url(url) else False
 
 
@@ -85,6 +85,3 @@ def normalizeSimple(data):
     result = {key: value for key, value in zip(keys, data)}
 
     return result
-
-
-print(validate('http://wrong.com'))

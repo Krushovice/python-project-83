@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{super()}}
+<h2>Ошибка на сервере</h2>
+<p>Попробуйте вернуться на <a href="{{url_for('index')}}">главную</a> страницу.
+{% endblock %}

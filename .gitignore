@@ -1,6 +1,6 @@
 venv/
 dist/
-__pycache__
+page_analyzer/__pycache__/
 .coverage
 coverage.xml
 .pytest_cache/
