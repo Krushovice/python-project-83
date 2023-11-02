@@ -75,7 +75,7 @@ def add_check(conn, id, status):
 @with_database_connection
 def get_check_page(conn, url_id):
     try:
-        with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
+        with conn.cursor(cursor_factory=extras.NamedTupleCursor) as cur:
             cur.execute("""SELECT *
                            FROM url_checks
                            WHERE url_id = %s
@@ -126,7 +126,7 @@ def get_url(conn, url):
 @with_database_connection
 def get_unique(conn):
     try:
-        with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
+        with conn.cursor(cursor_factory=extras.NamedTupleCursor) as cur:
             cur.execute("""SELECT * FROM urls
                            ORDER BY created_at DESC
                            LIMIT 5""")
@@ -143,7 +143,7 @@ def get_unique(conn):
 @with_database_connection
 def get_all_checks(conn):
     try:
-        with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
+        with conn.cursor(cursor_factory=extras.NamedTupleCursor) as cur:
             cur.execute("""SELECT * FROM url_checks
                            ORDER BY id DESC
                            LIMIT 5""")
