@@ -25,8 +25,8 @@
             <td>
               {% set check_dates = [] %}
               {% for check in check_data %}
-                {% if check['url_id'] == url['id'] %}
-                  {% set _ = check_dates.append(check['date'].strftime('%Y-%m-%d')) %}
+                {% if check.id == url['id'] %}
+                  {% set _ = check_dates.append(check.created_at.strftime('%Y-%m-%d')) %}
                 {% endif %}
               {% endfor %}
               {% set sorted_check_dates = check_dates | sort %}
@@ -35,8 +35,8 @@
             <td>
               {% set status_codes = [] %}
               {% for check in check_data %}
-                {% if check['url_id'] == url['id'] %}
-                  {% set _ = status_codes.append(check['status_code']) %}
+                {% if check.url_id == url['id'] %}
+                  {% set _ = status_codes.append(check.status_code) %}
                 {% endif %}
               {% endfor %}
               {% set sorted_status_codes = status_codes | sort(attribute='date', reverse=true) %}

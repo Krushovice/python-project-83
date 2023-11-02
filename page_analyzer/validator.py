@@ -8,13 +8,13 @@ def is_valid(url):
     return True if validators.url(url) else False
 
 
-def toValidString(url):
+def to_valid_string(url):
     h = urlparse(url)
     res = f'{h.scheme}://{h.hostname}'
     return res
 
 
-def getStatus(url):
+def get_status(url):
     try:
         r = requests.get(url)
         status = r.status_code
@@ -24,7 +24,7 @@ def getStatus(url):
         print('Сайт недействителен')
 
 
-def siteAnalize(url):
+def site_analize(url):
     try:
         response = requests.get(url)
         data = {'title': '',
@@ -61,21 +61,7 @@ def siteAnalize(url):
         print(f'Ошибка при отправке запроса: {e}')
 
 
-def normalizeNested(data):
-    keys_for_urls = ['id', 'name', 'date']
-    keys_for_checks = ['id', 'url_id', 'status_code', 'h1', 'title', 'description', 'date']
-
-    def format_data(item):
-        keys = keys_for_checks if len(item) == 7 else keys_for_urls
-        item_dict = {key: value for key, value in zip(keys, item)}
-
-        return item_dict
-
-    result = [format_data(item) for item in data]
-    return result
-
-
-def normalizeSimple(data):
+def normalize_simple(data):
     keys_for_urls = ['id', 'name', 'date']
     keys_for_checks = ['id', 'url_id', 'status_code', 'h1', 'title', 'description', 'date']
     if len(data) > 3:
