@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2 import extras
 from flask import current_app as app
 from datetime import datetime
-from page_analyzer.validator import (to_valid_string,
+from page_analyzer.utils import (to_valid_string,
                                      normalize_simple,
                                      site_analize)
 
