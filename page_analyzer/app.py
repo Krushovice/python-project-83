@@ -3,7 +3,7 @@ from page_analyzer.db import (add_check, add_url, get_page_by_id,
                               get_all_checks, get_check_page,
                               get_unique, get_url)
 from dotenv import load_dotenv
-from page_analyzer.validator import is_valid, get_status
+from page_analyzer.utils import is_valid, get_status
 from flask import (Flask, flash, render_template, request,
                    redirect, url_for)
 
