@@ -3,9 +3,7 @@ import psycopg2
 from psycopg2 import extras
 from flask import current_app as app
 from datetime import datetime
-from page_analyzer.utils import (to_valid_string,
-                                     normalize_simple,
-                                     site_analize)
+from page_analyzer.utils import to_valid_string, normalize_simple, site_analize
 
 
 # создаем декоратор для управления подключением и закрытием сессии с БД
