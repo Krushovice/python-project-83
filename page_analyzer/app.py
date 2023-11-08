@@ -3,7 +3,9 @@ from page_analyzer.db import (add_check, add_url, get_page_by_id,
                               get_all_checks, get_check_page,
                               get_unique, get_url)
 from dotenv import load_dotenv
-from page_analyzer.utils import is_valid, get_status
+from page_analyzer.utils import (is_valid, get_status,
+                                 to_valid_string, normalize_simple,
+                                 site_analize)
 from flask import (Flask, flash, render_template, request,
                    redirect, url_for)
 
@@ -36,17 +38,16 @@ def index():
 def set_urls():
     url = request.form['url']
     if is_valid(url):
-        if not add_url(url):
+        addr = to_valid_string(url)
+        if not add_url(addr):
             flash('Страница уже существует', category='success')
-            data = get_url(url)
-            page_id = data['id']
-            return redirect(url_for('show_url', id=f'{page_id}'))
-        else:
-            data = get_url(url)
-            page_id = data['id']
-            flash('Страница успешно добавлена', category='success')
-            return redirect(url_for('show_url', id=f'{page_id}'))
 
+        else:
+            flash('Страница успешно добавлена', category='success')
+        db_page = get_url(addr)
+        data = normalize_simple(db_page)
+        page_id = data['id']
+        return redirect(url_for('show_url', id=f'{page_id}'))
     else:
         flash('Некорректный URL', category='danger')
         return render_template('index.html'), 422
@@ -63,7 +64,8 @@ def get_urls():
 
 @app.route('/urls/<id>')
 def show_url(id):
-    page = get_page_by_id(id)
+    db_data = get_page_by_id(id)
+    page = normalize_simple(db_data)
     id = id
     name = page['name']
     date = page['date'].date()
@@ -78,14 +80,15 @@ def show_url(id):
 @app.route('/urls/<id>/checks', methods=['POST', 'GET'])
 def check_url(id):
     if request.method == "POST":
-        page = get_page_by_id(id)
-        url = page['name']
-        status = get_status(url)
+        db_page = get_page_by_id(id)
+        url = normalize_simple(db_page)
+        status = get_status(url['name'])
         if status != 200:
             flash("Произошла ошибка при проверке", category='danger')
             return redirect(url_for('show_url', id=id))
 
-        add_check(id, status)
+        data = site_analize(url['name'])
+        add_check(id, data, status)
         flash('Страница успешно проверена', category='success')
         return redirect(url_for('show_url',
                                 id=id))
