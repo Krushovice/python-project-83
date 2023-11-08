@@ -58,7 +58,7 @@ def site_analize(url):
         if meta_description:
             data['description'] = meta_description.get('content')
         else:
-            ''
+            data['description'] = ''
             data['h1'] = h1.text if h1 else ''
 
     else:
