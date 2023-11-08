@@ -45,9 +45,8 @@ def site_analize(url):
         content_type = response.headers.get('content-type')
         if content_type and 'charset' in content_type:
             encoding = content_type.split('charset=')[-1]
-        else:
-            encoding = 'utf-8'  # По умолчанию UTF-8
 
+        encoding = 'utf-8'  # По умолчанию UTF-8
         # Декодирование текста с учетом кодировки
         decoded_text = response.content.decode(encoding, 'ignore')
         soup = BeautifulSoup(decoded_text, 'html.parser')
@@ -59,8 +58,10 @@ def site_analize(url):
             data['description'] = meta_description.get('content')
         else:
             data['description'] = ''
-            data['h1'] = h1.text if h1 else ''
 
+        data['h1'] = h1.text if h1 else ''
+        if not h1:
+            logging.error('h1 не найден на странице')
     else:
         logging.error(f'Ошибка при получении. Статус-код: {response.status_code}')
 
