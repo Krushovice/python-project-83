@@ -17,21 +17,27 @@ def to_valid_string(url):
 def get_status(url):
     try:
         r = requests.get(url)
-        status = r.status_code
-        return status
 
     except requests.exceptions.RequestException:
         print('Сайт недействителен')
 
+    else:
+        status = r.status_code
+        return status
+
 
 def site_analize(url):
+    data = {'title': '',
+            'h1': '',
+            'description': ''
+            }
     try:
         response = requests.get(url)
-        data = {'title': '',
-                'h1': '',
-                'description': ''
-                }
 
+    except requests.exceptions.RequestException as e:
+        print(f'Ошибка при отправке запроса: {e}')
+
+    else:
         if response.status_code == 200:
             # Определение кодировки из заголовков HTTP, если указано
             content_type = response.headers.get('content-type')
@@ -51,14 +57,12 @@ def site_analize(url):
                 data['description'] = meta_description.get('content')
             else:
                 ''
-            data['h1'] = h1.text if h1 else ''
+                data['h1'] = h1.text if h1 else ''
 
         else:
             print(f'Ошибка при получении. Статус-код: {response.status_code}')
 
-        return data
-    except requests.exceptions.RequestException as e:
-        print(f'Ошибка при отправке запроса: {e}')
+    return data
 
 
 def normalize_simple(data):

@@ -26,23 +26,20 @@ def with_database_connection(func):
 
 @with_database_connection
 def add_url(conn, url):
-    try:
-        with conn.cursor() as cur:
-            tm = datetime.now()
-            addr = to_valid_string(url)
-            cur.execute('SELECT id FROM urls WHERE name = %s', (addr,))
-            existing_record = cur.fetchone()
+    with conn.cursor() as cur:
+        tm = datetime.now()
+        addr = to_valid_string(url)
+        cur.execute('SELECT id FROM urls WHERE name = %s', (addr,))
+        existing_record = cur.fetchone()
 
-            if existing_record:
-                print('Запись с таким именем уже существует')
-                return False
+        if existing_record:
+            print('Запись с таким именем уже существует')
+            return False
 
-            cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (addr, tm))
-            conn.commit()
-            return True
-    except psycopg2.Error as e:
-        print("Ошибка добавления адреса в БД " + str(e))
-        return False
+        cur.execute('INSERT INTO urls (name, created_at) VALUES (%s, %s)', (addr, tm))
+        conn.commit()
+        return True
+    return False
 
 
 @with_database_connection
